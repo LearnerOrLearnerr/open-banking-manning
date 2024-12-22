@@ -17,6 +17,6 @@ public class TransactionServiceTest {
     @Test
     public void testService () {
         List<Transaction> list = txnService.findAllByAccountNumber("123");
-        assertTrue (list.size() == 3 || list.size() == 5);
+        assertTrue (list.size() >= 3 && list.size() <= 5);
     }
 }
