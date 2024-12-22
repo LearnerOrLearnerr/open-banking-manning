@@ -1,6 +1,4 @@
-package io.betterbanking;
-
-import io.betterbanking.tp.Transaction;
+package io.betterbanking.tp;
 
 import java.util.List;
 import java.util.LinkedList;
