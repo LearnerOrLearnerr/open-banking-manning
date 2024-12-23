@@ -1,4 +1,4 @@
-package io.betterbanking.tp;
+package io.betterbanking.service;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import io.betterbanking.entity.Transaction;
+
 @SpringBootTest
 public class TransactionServiceTest {
 
@@ -16,7 +18,7 @@ public class TransactionServiceTest {
 
     @Test
     public void testService () {
-        List<Transaction> list = txnService.findAllByAccountNumber("123");
+        List<Transaction> list = txnService.findAllByAccountNumber(123);
         assertTrue (list.size() >= 3 && list.size() <= 5);
     }
 }

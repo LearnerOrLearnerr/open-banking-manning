@@ -1,4 +1,4 @@
-package io.betterbanking.tp;
+package io.betterbanking.web;
 
 import java.util.List;
 
@@ -8,18 +8,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.betterbanking.entity.Transaction;
+import io.betterbanking.service.TransactionService;
+
 
 @RestController
-@RequestMapping(path="/api/account", produces="application/json")
+@RequestMapping("/api/v1/transactions")
 public class TransactionController {
 
     @Autowired
     private TransactionService svc;
 
-    // http://localhost:8080/api/account/123
-    @GetMapping(params="/{id}")
-    public List<Transaction> getTransactions(@PathVariable("id") String id) {
-        List<Transaction> txnList = svc.findAllByAccountNumber(id);
+    @GetMapping("/{accountNumber}")
+    public List<Transaction> getTransactions(@PathVariable("accountNumber") final Integer accountNumber) {
+        List<Transaction> txnList = svc.findAllByAccountNumber(accountNumber);
         return txnList;
     }    
 }

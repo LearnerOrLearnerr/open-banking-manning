@@ -33,7 +33,7 @@ dependencies {
 }
 
 application {
-	mainClassName = 'io.betterbanking.tp.TpApplication'
+	mainClassName = 'io.betterbanking.BetterBankingApplication'
 }
 
 
