@@ -15,7 +15,7 @@ public class TransactionService {
      * @param accountNumber
      * @return
      */
-    public List<Transaction> findAllByAccountNumber (final Integer accountNumber) {
+    public Iterable<Transaction> findAllByAccountNumber (final Integer accountNumber) {
         List<Transaction> list = new LinkedList<>();
 
         for (int i=0; i<5; i++) {

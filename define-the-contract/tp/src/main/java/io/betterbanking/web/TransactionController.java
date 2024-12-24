@@ -20,8 +20,8 @@ public class TransactionController {
     private TransactionService svc;
 
     @GetMapping("/{accountNumber}")
-    public List<Transaction> getTransactions(@PathVariable("accountNumber") final Integer accountNumber) {
-        List<Transaction> txnList = svc.findAllByAccountNumber(accountNumber);
+    public Iterable<Transaction> getTransactions(@PathVariable("accountNumber") final Integer accountNumber) {
+        Iterable<Transaction> txnList = svc.findAllByAccountNumber(accountNumber);
         return txnList;
     }    
 }
