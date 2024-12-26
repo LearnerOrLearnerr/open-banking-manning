@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TransactionRestApplicationTest {
+public class TrasnsactionControllerIntegrationTest {
 
     @Autowired
     MockMvc mvc;
