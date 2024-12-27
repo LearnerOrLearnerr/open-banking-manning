@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'io.betterbanking'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.2-SNAPSHOT'
 
 java {
 	toolchain {
@@ -30,6 +30,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.rest-assured:rest-assured'
+	testImplementation 'io.rest-assured:spring-mock-mvc:5.4.0'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -37,7 +38,6 @@ application {
 	mainClassName = 'io.betterbanking.BetterBankingApplication'
 }
 
-
-tasks.named('test') {
+test {
 	useJUnitPlatform()
 }
