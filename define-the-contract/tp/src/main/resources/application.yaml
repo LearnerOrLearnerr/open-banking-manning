@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: betterbanking
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: better-banking
+      username: admin
+      password: adminpassword

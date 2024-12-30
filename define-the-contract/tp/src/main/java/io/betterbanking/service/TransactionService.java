@@ -1,14 +1,20 @@
 package io.betterbanking.service;
 
-import java.util.List;
-import java.util.Date;
-import java.util.LinkedList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.betterbanking.entity.Transaction;
+import io.betterbanking.repository.TransactionRepository;
 
 @Service
 public class TransactionService {
+
+    private TransactionRepository repo;
+
+    @Autowired
+    public TransactionService (TransactionRepository repo) {
+        this.repo = repo;
+    }
 
     /**
      * Fetch transactions list by account number
@@ -16,20 +22,7 @@ public class TransactionService {
      * @return
      */
     public Iterable<Transaction> findAllByAccountNumber (final Integer accountNumber) {
-        List<Transaction> list = new LinkedList<>();
-
-        for (int i=0; i<5; i++) {
-            Transaction txn = new Transaction();
-            txn.setAccountNumber(accountNumber);
-            txn.setCurrency("GBP");
-            txn.setMerchantName(i%2 == 0 ? "Asda" : "Tesco");
-
-            txn.setAmount(Double.valueOf(10*i));
-            txn.setDate(new Date());
-
-            list.add (txn);
-        }
-
-        return list;
+        Iterable<Transaction> txns = repo.findByAccountNumber(accountNumber);
+        return txns;
     }
 }

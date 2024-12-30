@@ -97,9 +97,23 @@ use betterbanking
 db.createCollection ("transactions")
 ```
 
-Data can be inserted to the collection and fetched as shown below:
+### Testing the collection
+
+Following is just to validate or troubleshoot collections:
 
 ```js
 db.getCollection("transactions").insertOne ({day: 25, month:12});
 db.getCollection("transactions").findOne();
+```
+
+### Optional: Creating users
+
+By default, the user creation would be done in the `admin` database. However, it's also possible to create them in another database as shown below.
+
+```js
+db.getSiblingDB("better-banking").createUser({
+    user: "admin",
+    pwd: "adminpassword",
+    roles: [{ role: "root", db: "admin" }]
+});
 ```
