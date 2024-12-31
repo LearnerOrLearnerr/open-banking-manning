@@ -2,12 +2,19 @@ package io.betterbanking.entity;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
 @Data
-@Document
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Document (collection = "transactions")
 public class Transaction {
 
     @Id

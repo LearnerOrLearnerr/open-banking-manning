@@ -1,18 +1,20 @@
 package io.betterbanking.service;
 
+import io.betterbanking.entity.Transaction;
+import io.betterbanking.repository.TransactionRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.betterbanking.entity.Transaction;
-import io.betterbanking.repository.TransactionRepository;
+import java.util.List;
 
 @Service
 public class TransactionService {
 
-    private TransactionRepository repo;
+    private final TransactionRepository repo;
 
     @Autowired
-    public TransactionService (TransactionRepository repo) {
+    public TransactionService (final TransactionRepository repo) {
         this.repo = repo;
     }
 
@@ -21,8 +23,7 @@ public class TransactionService {
      * @param accountNumber
      * @return
      */
-    public Iterable<Transaction> findAllByAccountNumber (final Integer accountNumber) {
-        Iterable<Transaction> txns = repo.findByAccountNumber(accountNumber);
-        return txns;
+    public List<Transaction> findAllByAccountNumber (final Integer accountNumber) {
+        return repo.findAllByAccountNumber(accountNumber);
     }
 }
