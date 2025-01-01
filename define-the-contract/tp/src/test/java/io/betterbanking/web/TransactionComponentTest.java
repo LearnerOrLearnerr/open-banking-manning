@@ -1,4 +1,3 @@
-/*
 package io.betterbanking.web;
 
 import org.hamcrest.Matchers;
@@ -37,4 +36,3 @@ public class TransactionComponentTest extends BaseTest {
             .statusCode(Matchers.is(200));
     }
 }
-*/

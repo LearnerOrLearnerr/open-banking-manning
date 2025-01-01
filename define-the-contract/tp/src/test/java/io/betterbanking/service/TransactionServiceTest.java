@@ -1,4 +1,4 @@
-/*package io.betterbanking.service;
+package io.betterbanking.service;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,4 +38,3 @@ public class TransactionServiceTest extends BaseTest {
         assertTrue (size >= 0);
     }
 }
-*/
