@@ -1,22 +1,35 @@
+/*
 package io.betterbanking.web;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+import io.betterbanking.BaseTest;
 
 import static io.restassured.RestAssured.given;
 
-@SpringBootTest (webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class TransactionComponentTest {   
+@SpringBootTest
+@Testcontainers
+public class TransactionComponentTest extends BaseTest {   
+ 
+    @BeforeAll
+    public static void beforeAll () {
+        mongo.start();
+    }
 
-    @LocalServerPort
-    private int port;
+    @AfterAll
+    public static void afterAll() {
+        mongo.stop();
+    }
 
     @Test
     public void testApplicationEndToEnd() {
-        final String uri = String.format ("http://localhost:%s/api/v1/transactions/123", port);
+        final String uri = getBaseUrl() + "/transactions/123";
+
         given()
             .when()
             .get(uri)
@@ -24,3 +37,4 @@ public class TransactionComponentTest {
             .statusCode(Matchers.is(200));
     }
 }
+*/

@@ -1,0 +1,8 @@
+# Mongodb settings for Testcontainers to use
+# Otherwise, the container would fail to start
+spring:
+  data:
+    mongodb:
+      username: admin
+      password: adminpassword
+      database: admin
