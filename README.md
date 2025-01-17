@@ -1,6 +1,17 @@
 # open-banking-manning
 Covers manning live project
 
+## Pulling a local copy
+
+```
+mkdir open-banking
+cd open-banking
+git init
+git remote add origin https://github.com/learnerOrLearnerr/open-banking-manning/
+git checkout main
+git pull origin main
+```
+
 ## Define the Contract
 The first part of the live project is defining the contract for better-banking.io, a FinTech startup.
 
