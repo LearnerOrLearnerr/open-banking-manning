@@ -9,8 +9,10 @@ The code is based on Spring Boot. Some libraries used outside this context are c
 ```java
 package org.betterbanking.entity;
 
-improt lombok.Builder;
+import lombok.Data;
+import lombok.Builder;
 
+@Data
 @Builder
 public class Transaction {
     Double amount;
@@ -18,6 +20,11 @@ public class Transaction {
 }
 ```
 
+- `@Data` for getters, setters, toString(), etc. See the [lombok explanation](https://projectlombok.org/features/Data).
+- `@Builder` for giving methods for setting up attributes, giving [object instantiation](https://projectlombok.org/features/Builder). 
+
+
+## Dependency management
 For this to work, `build.gradle` needs to be updated:
 
 ```groovy
