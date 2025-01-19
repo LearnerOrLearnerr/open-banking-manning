@@ -70,7 +70,14 @@ dependencies {
 
 ## Mock MVC
 
-Mock MVC is a Spring testing framework for HTTP requests and responses without the need for a running server.
+Mock MVC is part of Spring Boot starter test. It's a Spring testing framework for HTTP requests and responses without the need for a running server.
+
+Some other testing libraries that are part of `spring-boot-starter-test` are
+
+- JUnit
+- Mockito
+- Hamcrest
+- MockMvc
 
 ```java
 @SpringBootTest
@@ -83,6 +90,40 @@ public class TransactionIntegrationTest {
     @Test
     public void testXyz() {
         mvc.perform (...);
+    }
+}
+```
+
+## rest-assured
+
+It's a separate [library](https://github.com/rest-assured/), used for REST based integrated testing.
+
+```groovy
+dependencies {
+    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+}
+```
+
+The following example shows the need to specify a web port for the rest-assured test client and the Spring application context:
+
+```java
+import static io.restassured.RestAssured.given;
+import org.hamcrest.Mathcers;
+
+@SpringBootTest (webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, 
+  classes = BetterBankingApplication.class)
+public class TransactionIntegratedTest {
+    
+    @LocalServerPort
+    private int port;
+
+    @Test
+    public void testTransaction () {
+        String uri = String.format ("http://localhost:%d/api/v1/transaction", port);
+        given().when()
+            .get(uri)
+            .then()
+            .statisCode (Matches.is(200));
     }
 }
 ```
