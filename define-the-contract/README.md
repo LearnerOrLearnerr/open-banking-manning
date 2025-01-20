@@ -2,6 +2,11 @@
 
 The code is based on Spring Boot. Some libraries used outside this context are covered below.
 
+- [Lombok](#lombok)
+- [Spring Boot Test](#spring-boot-test)
+- [Mock MVC](#mock-mvc)
+- [rest-assured](#rest-assured)
+
 ## Lombok
 
 [Project Lombok](https://projectlombok.org/features/) has been used for its excellent annotations. A few examples below.
@@ -70,14 +75,15 @@ dependencies {
 
 ## Mock MVC
 
-Mock MVC is part of Spring Boot starter test. It's a Spring testing framework for HTTP requests and responses without the need for a running server.
+Mock MVC is part of Spring Boot starter test. It's a Spring testing framework for HTTP requests and responses without the need for a running server. In short, it's suitable for unit testing
 
-Some other testing libraries that are part of `spring-boot-starter-test` are
 
-- JUnit
-- Mockito
-- Hamcrest
-- MockMvc
+> Some other testing libraries that are part of `spring-boot-starter-test` are
+> - JUnit
+> - Mockito
+> - Hamcrest
+
+Following example shows `AutoConfigureMockMvc` and `Autowired` annotations.
 
 ```java
 @SpringBootTest
@@ -123,7 +129,7 @@ public class TransactionIntegratedTest {
         given().when()
             .get(uri)
             .then()
-            .statisCode (Matches.is(200));
+            .statisCode (Matchers.is(200));
     }
 }
 ```
