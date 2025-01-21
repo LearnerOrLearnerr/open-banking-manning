@@ -1,6 +1,6 @@
 # Spring Boot with JPA for mongodb
 
-The mongodb container execution is as explained in the [docker-compose.yml]() README.
+The mongodb container execution is as explained in the [docker-compose.yml](https://github.com/LearnerOrLearnerr/open-banking-manning/blob/main/docker-mongodb/README.md) README.md file.
 
 ## build.gradle
 
@@ -34,5 +34,23 @@ public class Transaction {
     private Data date;
     private String currency;
 }
-
 ```
+
+## Adding a JPA respository
+
+`MongoRepository` is the *interface* that needs to be extended for creating custom repositories to interact with MongoDB collections.
+
+> Queries are automatically generated as long as the Spring Data naming conventions are followed.
+
+Following example can fetch all items in the collection based on the account number (defined as an Integer):
+
+```java
+// Annotation required
+// Defined as an interface only
+@Repository
+public interface TransactionRepository extends MongoRepository <Transaction, String> {
+    // Custom query interface
+    public List<Transaction> findAllByAccountNumber (final Integer accountNumber);
+}
+```
+##
