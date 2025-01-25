@@ -53,4 +53,63 @@ public interface TransactionRepository extends MongoRepository <Transaction, Str
     public List<Transaction> findAllByAccountNumber (final Integer accountNumber);
 }
 ```
-##
+
+## Testcontainers
+Running a database engine similar to production in the test environment is possible with [Testcontainers](https://testcontainers.com/). In general, Testcontainers provide light-weight, disposable containers for testing.
+
+Java based library for Testcontainer is discussed [here](https://java.testcontainers.org/). The build.gradle needs to include the following dependencies:
+
+```groovy
+dependencies {
+    testImplementation platform('org.testcontainers:testcontainers-bom:1.20.4')
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcnotainers:mongodb'
+}
+```
+
+Following `@Testcontainer` annotated class runs with mongodb container:
+
+```java
+// package and imports skipped
+
+@SpringBootTest (classes = BetterBankingApplication.class)
+@Testcontainers
+@AutoConfigureMockMvc
+public class TransactionControllerIntegrationTestcontainers {
+
+    // image name, along with the JS script for collection creation
+    private static final String MONGODB_IMAGE_NAME = "mongo:4.0.10";
+    private static final String INIT_SCRIPT_FILENAME = "init-script.js";
+
+    // Testcontainers mongodb container instance
+    private static MongoDBContainer mongoDB;
+
+    @Autowired
+    private MockMvc mvc;
+
+    /**
+     * Test class based on MockMvc
+     */
+    @Test
+    public void testController () throws Exception {
+        final String uri = "https://localhost:8080/api/v1/transactions/123";
+        mvc.perform (get(uri))
+                .andExpect(status().isOk());
+    }
+
+    @BeforeAll
+    public static void beforeAll() {
+
+        MountableFile initScript = forClasspathResource(INIT_SCRIPT_FILENAME);
+
+        mongoDB = new MongoDBContainer(DockerImageName.parse(MONGODB_IMAGE_NAME)).
+                withCopyFileToContainer(initScript, "/docker-entrypoint-initdb.d/");
+        mongoDB.start();
+    }
+
+    @AfterAll
+    public static void afterAll() {
+        mongoDB.stop();
+    }
+}
+```
