@@ -37,6 +37,23 @@ docker ps
 docker stop mongodb
 ```
 
+# Install mongosh
+
+A slightly modified stackoverflow [solution](https://stackoverflow.com/questions/74883695/how-to-install-mongoshell-of-mongodb-4-4-0-image-in-docker-container) is given below:
+
+```bash
+apt-get update
+
+apt-get install wget, gnupg
+
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
+
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+
+apt-get install -y mongodb-mongosh
+```
+
+
 # Next steps
 
 Use the following `docker-compose.yml`:

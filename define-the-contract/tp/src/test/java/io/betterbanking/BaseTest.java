@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.images.builder.Transferable;
 import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.utility.MountableFile;
 
 /**
  * BaseTest class for starting up the Testcontainers' mongodb container
@@ -24,11 +26,15 @@ public class BaseTest {
     protected static String DB_NAME;
 
     @Container
-    protected static MongoDBContainer mongo = new MongoDBContainer ("mongo:4.0.10")
+    protected static MongoDBContainer mongo = new MongoDBContainer ("mongo:5.0.13")
         .withExposedPorts(INTERNAL_PORT)
         .withEnv ("MONGO_INITDB_ROOT_USERNAME", DB_USERNAME)
         .withEnv ("MONGO_INITDB_ROOT_PASSWORD", DB_PASSWORD)
-        .withEnv ("MONGO_INITDB_DATABASE", DB_NAME);
+        .withEnv ("MONGO_INITDB_DATABASE", DB_NAME)
+        .withCopyFileToContainer ( 
+            MountableFile.forClasspathResource("init.js"), 
+            "/docker-entrypoint-initdb.d/init.js"
+        );
 
 
     @DynamicPropertySource

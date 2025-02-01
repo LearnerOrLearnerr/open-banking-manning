@@ -13,6 +13,10 @@ public class TransactionService {
 
     private final TransactionRepository repo;
 
+    /**
+     * Constructor injection used
+     * @param repo
+     */
     @Autowired
     public TransactionService (final TransactionRepository repo) {
         this.repo = repo;
