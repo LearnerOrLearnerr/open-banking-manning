@@ -4,7 +4,7 @@ plugins {
     // Spring boot
     id 'org.springframework.boot' version '3.4.2'
 
-    // Sprint dependency management
+    // Spring dependency management
     id 'io.spring.dependency-management' version '1.1.7'
 
     // OpenAPI generator
@@ -28,8 +28,37 @@ repositories {
 
 // OpenAPI generator
 openApiGenerate {
-    inputSpec.set ("$rootDir/src/main/resources/yaml/account-info-openapi.yaml")
     generatorName = "spring"
+    inputSpec = "$rootDir/src/main/resources/yaml/account-info-openapi.yaml"
+
+    // Optional configuration fields
+    outputDir = "$rootDir/build/generated/open-banking"
+
+    // base and sub-packages
+    // commented out because basePackage isn't working
+    /*
+    basePackage = "io.betterbanking"
+    invokerPackage = "client"
+    apiPackage = "api"
+    modelPackage = "model"
+     */
+
+    invokerPackage = "io.betterbanking.client"
+    apiPackage = "io.betterbanking.api"
+    modelPackage = "com.acme.banking.model"
+}
+
+/**
+ * Copy generated "model" subfolders to src/main/java
+ */
+tasks.register('copyGeneratedModel', Copy) {
+    from("$rootDir/build/generated/open-banking/src/main/java") {
+        include "**/model/*"
+    }
+
+    into("$rootDir/src/main/java")
+
+    includeEmptyDirs = false
 }
 
 

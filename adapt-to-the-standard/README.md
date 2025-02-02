@@ -50,4 +50,8 @@ openApiGenerate {
 }
 ```
 
-Generated code will be stored in `build/generated-sources` folder.
+Gradle taks `openApiGenerate` can be used to build code, which will be  stored in `build/generated-sources` folder.
+
+```sh
+gradlew openApiGenerate
+```
