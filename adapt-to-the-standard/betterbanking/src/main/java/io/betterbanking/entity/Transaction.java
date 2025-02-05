@@ -7,13 +7,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor // required by @Builder
+@Document (collection = "transactions")
 public class Transaction {
 
-//    @Id
+    @Id
     private String id;
 
     private String type;

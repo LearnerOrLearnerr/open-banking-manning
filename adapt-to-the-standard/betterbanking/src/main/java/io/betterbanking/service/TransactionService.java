@@ -13,7 +13,7 @@ public class TransactionService {
     @Autowired
     TransactionRepository repo;
 
-    public List<Transaction> findAllByAccount (final Integer acctNr) {
-        return repo.findAllByAccount (acctNr);
+    public List<Transaction> findAllByAccountNumber(final Integer acctNr) {
+        return repo.findAllByAccountNumber(acctNr);
     }
 }
