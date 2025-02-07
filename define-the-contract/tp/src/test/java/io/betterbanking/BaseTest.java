@@ -6,12 +6,14 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.images.builder.Transferable;
 import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.MountableFile;
 
 /**
  * BaseTest class for starting up the Testcontainers' mongodb container
  * It uses the configurational settings from application.yaml for username and password, etc.
  */
+@Testcontainers
 public class BaseTest {
 
     protected static final int INTERNAL_PORT = 27017;
@@ -30,12 +32,14 @@ public class BaseTest {
         .withExposedPorts(INTERNAL_PORT)
         .withEnv ("MONGO_INITDB_ROOT_USERNAME", DB_USERNAME)
         .withEnv ("MONGO_INITDB_ROOT_PASSWORD", DB_PASSWORD)
-        .withEnv ("MONGO_INITDB_DATABASE", DB_NAME)
+        .withEnv ("MONGO_INITDB_DATABASE", DB_NAME);
+    /*
+        // Testcontainers instantiation fails if init.js is copied; disabling this
         .withCopyFileToContainer ( 
             MountableFile.forClasspathResource("init.js"), 
             "/docker-entrypoint-initdb.d/init.js"
         );
-
+    */
 
     @DynamicPropertySource
     protected static void setProperties (DynamicPropertyRegistry reg) {

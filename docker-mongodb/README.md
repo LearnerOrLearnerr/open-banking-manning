@@ -97,7 +97,7 @@ The following command can be used to open up the bash terminal in the running co
 docker exec -it mongodb bash
 ```
 
-### Creating a mongosh adming session
+### Creating a mongosh admin session
 
 Once bash session is established, the following command will connect to the database (using the credentials from `docker-compose.yml`):
 
@@ -119,8 +119,9 @@ db.createCollection ("transactions")
 Following is just to validate or troubleshoot collections:
 
 ```js
-db.getCollection("transactions").insertOne ({day: 25, month:12});
-db.getCollection("transactions").findOne();
+db.getCollection("transactions").insertOne ({amount: 35.5, currency: "GBP", accountNumber: 123});
+db.getCollection("transactions").insertOne ({amount: 230.0, currency: "GBP", accountNumber: 123});
+db.getCollection("transactions").find( { accountNumber: 123 });
 ```
 
 ### Optional: Creating users

@@ -20,21 +20,12 @@ public class TransactionControllerIntegrationTest extends BaseTest {
     @Autowired
     MockMvc mvc;
 
-    @BeforeAll
-    public static void beforeAll () {
-        mongo.start();
-    }
-
-    @AfterAll
-    public static void afterAll() {
-        mongo.stop();
-    }
-
     @Test
     public void testTransactionController() throws Exception {
         
         final String uri = getBaseUrl() + "/transactions/123";
 
+        // uses Spring Boot Test's MockMvc
         mvc.perform (get (uri))
             .andExpect(status().isOk());
     }
