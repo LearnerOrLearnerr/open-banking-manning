@@ -5,7 +5,6 @@ import io.restassured.internal.ValidatableResponseImpl;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.TypeReference;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static io.restassured.RestAssured.given;
@@ -14,7 +13,10 @@ import org.hamcrest.Matchers;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 /**
- * WebEnvironment required for fully integrated test
+ * This test only works when database is running separately, and access credentials match with
+ * the application.yaml of the main.
+ *
+ * Using WebEnvironment as required for fully integrated test
  */
 @SpringBootTest (webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TransactionControllerIntegrationTest {

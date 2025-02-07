@@ -1,8 +1,6 @@
 spring:
   data:
     mongodb:
-      hostname: localhost
-      port: 27017
       username: admin
       password: adminpassword
       database: betterbanking
