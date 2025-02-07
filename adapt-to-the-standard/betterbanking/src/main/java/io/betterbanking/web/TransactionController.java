@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/transactions")
@@ -19,12 +20,10 @@ public class TransactionController {
     @GetMapping("/{acctNr}")
     public List<TransactionDto> findAllByAccountNumber (@PathVariable final Integer acctNr) {
         List<Transaction> list = svc.findAllByAccountNumber(acctNr);
-        List<TransactionDto> listDto = new ArrayList<>(list.size());
 
-        for (Transaction txn : list) {
-            TransactionDto dto = buildTransactionDto (txn);
-            listDto.add(dto);
-        }
+        List<TransactionDto> listDto = list.stream()
+                .map (this::buildTransactionDto)
+                .collect(Collectors.toList());
 
         return listDto;
     }

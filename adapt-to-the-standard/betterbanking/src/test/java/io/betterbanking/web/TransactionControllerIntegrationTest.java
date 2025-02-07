@@ -1,8 +1,5 @@
 package io.betterbanking.web;
 
-import io.betterbanking.BetterBakingApplication;
-import io.restassured.internal.ValidatableResponseImpl;
-import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
