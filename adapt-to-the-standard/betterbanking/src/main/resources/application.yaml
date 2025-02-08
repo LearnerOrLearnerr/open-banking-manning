@@ -10,7 +10,7 @@ spring:
 resilience4j:
   circuitbreaker:
     instances:
-      transactionApiClient:
+      transactionService:
         failureRateThreshold: 100
         waitDurationInOpenState: 10s
         slidingWindowSize: 1 # Consider only the last call

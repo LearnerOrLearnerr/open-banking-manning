@@ -1,11 +1,9 @@
-package io.betterbanking.service;
+package io.betterbanking.adapters.acme;
 
-import com.acme.banking.model.OBCurrencyExchange5;
 import com.acme.banking.model.OBTransaction6;
 import io.betterbanking.entity.Transaction;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.Optional;
@@ -18,7 +16,7 @@ public class OBTransactionAdapter {
     /**
      * Convert OBTransaction6 to Transaction
 \     */
-    public static Transaction toTransaction (OBTransaction6 obTransaction) {
+    public static Transaction adapt(OBTransaction6 obTransaction) {
 
         BigDecimal amount = new BigDecimal(obTransaction.getAmount().getAmount());
         BigDecimal exchangeRate = (obTransaction.getCurrencyExchange() == null) ?

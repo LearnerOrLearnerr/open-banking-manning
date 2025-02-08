@@ -1,5 +1,5 @@
 package io.betterbanking.repository;
 
 public interface MerchantDetailsRepository {
-    public String findLogoByMerchantName (String merchantName);
+    public String findMerchantLogo(final String merchantName);
 }

@@ -17,7 +17,7 @@ public class TransactionController {
     TransactionService svc;
 
     @GetMapping("/{acctNr}")
-    public List<TransactionDto> findAllByAccountNumber (@PathVariable final String acctNr) {
+    public List<TransactionDto> findAllByAccountNumber (@PathVariable final Integer acctNr) {
 
         List<Transaction> list = svc.findAllByAccountNumber(acctNr);
 

@@ -17,7 +17,7 @@ public class MerchantDetailsRepositoryImpl implements MerchantDetailsRepository 
     }
 
     @Override
-    public String findLogoByMerchantName(String merchantName) {
+    public String findMerchantLogo(final String merchantName) {
         String logo = Optional.ofNullable(merchantMap.get(merchantName)).orElse("generic-logo.png");
         return logo;
     }

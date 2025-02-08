@@ -1,7 +1,7 @@
 package io.betterbanking.service;
 
 import io.betterbanking.entity.Transaction;
-import io.betterbanking.repository.TransactionRepository;
+import io.betterbanking.repository.TransactionApiClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,8 +28,8 @@ public class TransactionServiceTest {
 
     @Test
     public void shouldReturnEmptyListWhenAccountNumberNotFound () {
-        final String ACCOUNT_NUMBER = "999";
-        when (apiClient.getTransactions(ACCOUNT_NUMBER)).thenReturn(List.of());
+        final Integer ACCOUNT_NUMBER = 999;
+        when (apiClient.findAllByAccountNumber(ACCOUNT_NUMBER)).thenReturn(List.of());
 
         List<Transaction> list = svc.findAllByAccountNumber(ACCOUNT_NUMBER);
         assertTrue (list.isEmpty());
@@ -37,22 +37,22 @@ public class TransactionServiceTest {
 
     @Test
     public void shouldReturnTransactionsWhenAccountNumberFound() {
-        final String ACCOUNT_NUMBER = "123";
+        final Integer ACCOUNT_NUMBER = 123;
 
         List<Transaction> list = new ArrayList<>();
         list.add (buildTransaction(ACCOUNT_NUMBER, "GBP", 35.0));
         list.add (buildTransaction(ACCOUNT_NUMBER, "GBP", 135.0));
 
-        when(apiClient.getTransactions(ACCOUNT_NUMBER)).thenReturn(list);
+        when(apiClient.findAllByAccountNumber(ACCOUNT_NUMBER)).thenReturn(list);
 
         List<Transaction> txns = svc.findAllByAccountNumber(ACCOUNT_NUMBER);
         assertFalse (txns.isEmpty());
-        assertEquals (ACCOUNT_NUMBER, txns.get(0).getAccountNumber().toString());
+        assertEquals (ACCOUNT_NUMBER, txns.get(0).getAccountNumber());
     }
 
-     public Transaction buildTransaction(String acctNr, String curr, Double amt) {
+     public Transaction buildTransaction(Integer acctNr, String curr, Double amt) {
          Transaction txn = Transaction.builder()
-                 .accountNumber(Integer.valueOf(acctNr))
+                 .accountNumber(acctNr)
                  .amount(amt)
                  .currency(curr)
                  .date (new Date())

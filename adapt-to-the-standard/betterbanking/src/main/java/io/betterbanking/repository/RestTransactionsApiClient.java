@@ -1,9 +1,9 @@
-package io.betterbanking.service;
+package io.betterbanking.repository;
 
 import com.acme.banking.model.OBTransaction6;
+import io.betterbanking.adapters.acme.OBTransactionAdapter;
 import io.betterbanking.entity.Transaction;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,7 @@ import java.util.List;
 public class RestTransactionsApiClient implements TransactionApiClient {
 
     @Override
-    @CircuitBreaker(name = "transactionApiClient", fallbackMethod = "fallbackMethod")
-    public List<Transaction> getTransactions(String accountNumber) {
+    public List<Transaction> findAllByAccountNumber(final Integer accountNumber) {
         final String baseUrl = "http://localhost:8080/api/v1";
         final String uri = String.format ("/accounts/%s/transactions", accountNumber);
 
@@ -35,11 +34,7 @@ public class RestTransactionsApiClient implements TransactionApiClient {
         if (listTransactions == null || listTransactions.isEmpty()) return List.of();
 
         return listTransactions.stream()
-                .map (txn -> OBTransactionAdapter.toTransaction(txn))
+                .map (txn -> OBTransactionAdapter.adapt(txn))
                 .toList();
-    }
-
-    public String fallbackMethod(Throwable t) {
-        return "{}";
     }
 }
