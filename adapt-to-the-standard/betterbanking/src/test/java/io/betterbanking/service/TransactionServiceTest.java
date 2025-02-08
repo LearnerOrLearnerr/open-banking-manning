@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 /**
- * Based on @MockitoBean TransactionRepository, test TransactionService
+ * Based on @MockitoBean TransactionApiClient, test TransactionService
  */
 @SpringBootTest
 public class TransactionServiceTest {
@@ -24,12 +24,12 @@ public class TransactionServiceTest {
     private TransactionService svc;
 
     @MockitoBean
-    private TransactionRepository repo;
+    private TransactionApiClient apiClient;
 
     @Test
     public void shouldReturnEmptyListWhenAccountNumberNotFound () {
-        final Integer ACCOUNT_NUMBER = 999;
-        when (repo.findAllByAccountNumber(ACCOUNT_NUMBER)).thenReturn(List.of());
+        final String ACCOUNT_NUMBER = "999";
+        when (apiClient.getTransactions(ACCOUNT_NUMBER)).thenReturn(List.of());
 
         List<Transaction> list = svc.findAllByAccountNumber(ACCOUNT_NUMBER);
         assertTrue (list.isEmpty());
@@ -37,22 +37,22 @@ public class TransactionServiceTest {
 
     @Test
     public void shouldReturnTransactionsWhenAccountNumberFound() {
-        final Integer ACCOUNT_NUMBER = 123;
+        final String ACCOUNT_NUMBER = "123";
 
         List<Transaction> list = new ArrayList<>();
         list.add (buildTransaction(ACCOUNT_NUMBER, "GBP", 35.0));
         list.add (buildTransaction(ACCOUNT_NUMBER, "GBP", 135.0));
 
-        when(repo.findAllByAccountNumber(ACCOUNT_NUMBER)).thenReturn(list);
+        when(apiClient.getTransactions(ACCOUNT_NUMBER)).thenReturn(list);
 
         List<Transaction> txns = svc.findAllByAccountNumber(ACCOUNT_NUMBER);
         assertFalse (txns.isEmpty());
-        assertEquals (ACCOUNT_NUMBER, txns.get(0).getAccountNumber());
+        assertEquals (ACCOUNT_NUMBER, txns.get(0).getAccountNumber().toString());
     }
 
-     public Transaction buildTransaction(Integer acctNr, String curr, Double amt) {
+     public Transaction buildTransaction(String acctNr, String curr, Double amt) {
          Transaction txn = Transaction.builder()
-                 .accountNumber(acctNr)
+                 .accountNumber(Integer.valueOf(acctNr))
                  .amount(amt)
                  .currency(curr)
                  .date (new Date())

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TransactionRepository extends MongoRepository <Transaction, String> {
+public interface TransactionRepository extends MongoRepository <Transaction, Integer> {
     public List<Transaction> findAllByAccountNumber (final Integer acctNr);
 }

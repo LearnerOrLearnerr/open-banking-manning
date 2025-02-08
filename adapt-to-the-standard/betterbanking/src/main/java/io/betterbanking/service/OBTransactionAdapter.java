@@ -10,8 +10,15 @@ import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+ * Adapter that accepts OBTransaction6 and returns Transaction
+ */
 public class OBTransactionAdapter {
-    public Transaction toTransaction (OBTransaction6 obTransaction) {
+
+    /**
+     * Convert OBTransaction6 to Transaction
+\     */
+    public static Transaction toTransaction (OBTransaction6 obTransaction) {
 
         BigDecimal amount = new BigDecimal(obTransaction.getAmount().getAmount());
         BigDecimal exchangeRate = (obTransaction.getCurrencyExchange() == null) ?

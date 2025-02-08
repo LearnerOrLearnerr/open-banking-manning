@@ -62,6 +62,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
+    // resilience4j for circuit breaker
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
+
     // test
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'

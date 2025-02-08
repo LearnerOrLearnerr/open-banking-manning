@@ -6,7 +6,6 @@ import io.betterbanking.web.dto.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,8 @@ public class TransactionController {
     TransactionService svc;
 
     @GetMapping("/{acctNr}")
-    public List<TransactionDto> findAllByAccountNumber (@PathVariable final Integer acctNr) {
+    public List<TransactionDto> findAllByAccountNumber (@PathVariable final String acctNr) {
+
         List<Transaction> list = svc.findAllByAccountNumber(acctNr);
 
         List<TransactionDto> listDto = list.stream()

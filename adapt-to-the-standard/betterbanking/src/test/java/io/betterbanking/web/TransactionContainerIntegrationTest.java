@@ -1,5 +1,6 @@
 package io.betterbanking.web;
 
+import io.restassured.response.ValidatableResponse;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,10 @@ public class TransactionContainerIntegrationTest extends BaseContainersTest {
         final String uri = String.format("http://localhost:%d/api/v1/transactions/%d", port, ACCOUNT_NUMBER);
 
         // Http 200, rest-assured
-        given().get(uri)
-                .then()
-                .statusCode(Matchers.is(200));
+        // Test case is failing!
+        // Test case is failing with 500 http error code (java.nio.channels.ClosedChannelException)
+        ValidatableResponse response = given().get(uri).then();
+        response.statusCode(Matchers.is(200));
+
     }
 }
