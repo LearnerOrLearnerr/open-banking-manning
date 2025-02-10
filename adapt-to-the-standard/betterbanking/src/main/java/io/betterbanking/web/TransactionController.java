@@ -33,6 +33,9 @@ public class TransactionController {
                 .accountNumber(txn.getAccountNumber())
                 .currency(txn.getCurrency())
                 .amount(txn.getAmount())
+                .date (txn.getDate())
+                .type (txn.getType())
+                .id (txn.getId())
                 .build();
 
         return dto;
