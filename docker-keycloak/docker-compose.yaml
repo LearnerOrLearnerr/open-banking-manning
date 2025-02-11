@@ -1,0 +1,11 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.2
+    container_name: kc
+    command: ["start-dev"]
+    environment:
+       KC_BOOTSTRAP_ADMIN_USERNAME: admin
+       KC_BOOTSTRAP_ADMIN_PASSWORD: adminpassword
+    ports:
+      - 9001:8080 # keycloak admin webapp
+      - 9000:9000 # realm could be accessible via this port (as per realm configuration)
