@@ -1,0 +1,133 @@
+plugins {
+    // Spring boot
+    id 'org.springframework.boot' version '3.4.2'
+
+    // Spring dependency management
+    id 'io.spring.dependency-management' version '1.1.7'
+
+    // OpenAPI generator
+    id 'org.openapi.generator' version '7.11.0'
+
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(23)
+    }
+}
+
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+// some dependencies copied from pom.xml of generated code
+dependencies {
+
+    // spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.data:spring-data-commons'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
+
+    // spring mongodb
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // javax
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+
+    // google jsr305?
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    // jackson
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    // openapi
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+
+    // lombok for annotation of model
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    // resilience4j for circuit breaker
+    // requires AOP as well
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
+
+    // test
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // rest-assured
+    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+
+    // testcontainers
+    testImplementation 'org.testcontainers:junit-jupiter:1.20.4'
+    testImplementation 'org.testcontainers:mongodb:1.20.4'
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+// OpenAPI generator
+openApiGenerate {
+    generatorName = 'spring'
+    inputSpec = "$rootDir/src/main/resources/yaml/account-info-openapi.yaml"
+
+    // Optional configuration fields
+    outputDir = "$rootDir/build/generated/open-banking"
+
+    // base and sub-packages
+    // commented out because basePackage isn't working
+    /*
+    basePackage = "io.betterbanking"
+    invokerPackage = "client"
+    apiPackage = "api"
+    modelPackage = "model"
+     */
+
+    invokerPackage = 'io.betterbanking.client'
+    apiPackage = 'io.betterbanking.api'
+    modelPackage = 'com.acme.banking.model'
+}
+
+/**
+ * Copy generated "model" subfolders to src/main/java
+ */
+tasks.register('copyGeneratedModel', Copy) {
+    from("$rootDir/build/generated/open-banking/src/main/java") {
+        include '**/model/*'
+    }
+
+    into("$rootDir/src/main/java")
+
+    includeEmptyDirs = false
+}
+
+/**
+ * Clean up copied, generated classes
+ */
+tasks.register('cleanupCopied', Delete) {
+    def generatedFilesDir  = "$rootDir/src/main/java/com/acme"
+    delete fileTree(dir: generatedFilesDir, include: '**/*.java')
+}
+
+clean {
+    dependsOn cleanupCopied
+}

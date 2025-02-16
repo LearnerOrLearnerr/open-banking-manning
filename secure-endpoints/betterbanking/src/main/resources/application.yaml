@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: dev
+  data:
+    mongodb:
+      hostname: localhost
+      port: 27017
+      username: admin
+      password: adminpassword
+      database: betterbanking
+      authentication-database: admin
+resilience4j:
+  circuitbreaker:
+    instances:
+      transactionService:
+        failureRateThreshold: 100
+        waitDurationInOpenState: 10s
+        slidingWindowSize: 1 # Consider only the last call
+        minimumNumberOfCalls: 1 # Even one call is enough
+        automaticTransitionFromOpenToHalfOpen: true
