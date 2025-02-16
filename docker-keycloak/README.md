@@ -57,10 +57,10 @@ curl -X POST ^
   -H "Content-Type: application/x-www-form-urlencoded" ^
   -d "client_id=open-banking" ^
   -d "client_secret=BxfDdnv47dGz3p9kzRenMx5NmqcYkfNi" ^
-  -d "username=ali" ^
-  -d "password=baba" ^
+  -d "username=ragamuffin" ^
+  -d "password=ragamuffin" ^
   -d "grant_type=password" ^
-  "http://localhost:9001/realms/open-banking-realm/protocol/openid-connect/token"
+  http://localhost:9001/realms/open-banking-realm/protocol/openid-connect/token
 ```
 
 Note the following:
@@ -70,3 +70,9 @@ Note the following:
 
 A JSON reponse with tokens such as `access_token` and `refresh_token` should be returned.
 
+The URL can be used to access the resource server. An example is given below (assuming the `access_token` is stored in the environment variable):
+
+```sh
+curl http://localhost:8081/hello ^
+  -H "Authorization: Bearer "%access_token%
+```
