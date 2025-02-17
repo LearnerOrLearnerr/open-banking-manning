@@ -9,6 +9,11 @@ spring:
       password: adminpassword
       database: betterbanking
       authentication-database: admin
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9001/realms/open-banking-realm/protocol/openid-connect/certs
 resilience4j:
   circuitbreaker:
     instances:
@@ -18,3 +23,10 @@ resilience4j:
         slidingWindowSize: 1 # Consider only the last call
         minimumNumberOfCalls: 1 # Even one call is enough
         automaticTransitionFromOpenToHalfOpen: true
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.example: DEBUG
+  pattern:
+    console: "%d{dd-MM-yyyy HH:mm:ss} %magenta([%thread]) %5p [%logger{1}] %m%n"

@@ -1,57 +1,54 @@
-# OpenAPI generator
+# Secure endpoints
+This project covers the Spring Boot Starter Security package. 
 
-Based on [this documentation](https://openapi-generator.tech/docs/installation/), below commands show `npm` usage to generate `Spring` based code.
+## Dependency on Keycloak
+Usage is dependent on a separately running Keycloak server; a separate explanation is available for running a 
+[Keycloak container](https://github.com/LearnerOrLearnerr/open-banking-manning/tree/main/docker-keycloak). It provides
+an example of an `open-banking-realm` along with an active, enabled user for password based authentication.
 
-## npm upgrade
+As part of this Spring Boot and Spring Security, the resource server connects with the Keycloak container/ instance for
+authentication.
 
-First things first.
+> **Note**  
+Spring Security v6+ doesn't use `KeycloakSecurityConfigurerAdapter`, which essentially changes the dependencies and usage of classes.
+
+# Required dependencies
+The code in this project uses the following libraries:
+
+* `org.springframework.boot:spring-boot-starter-security`
+* `org.springframework.boot:spring-boot-starter-oauth2-resource-server`
+
+# Application properties
+Only JWT URL is required to be configured:
+
+```yaml
+security:
+oauth2:
+  resourceserver:
+    jwt:
+      jwk-set-uri: http://localhost:9001/realms/open-banking-realm/protocol/openid-connect/certs
+```
+
+# Security filter chain
+Please see `config.SecurityConfiguration` class for building HTTPSecurity object.
+
+# Test client
+The following command can be used for getting the access toke from Keycloak:
 
 ```sh
-npm install -g npm@latest
+curl -X POST "http://localhost:9001/realms/open-banking-realm/protocol/openid-connect/token" ^
+-H "Content-Type: application/x-www-form-urlencoded" ^
+  -d "client_id=open-banking" ^
+  -d "client_secret=BxfDdnv47dGz3p9kzRenMx5NmqcYkfNi" ^
+  -d "grant_type=password" ^
+  -d "username=ragamuffin" ^
+  -d "password=ragamuffin"
 ```
 
-## Install openapi-generator-cli
+The `access_token` from the response should be taken out (copy-paste or use jq tool). The access token 
+can be used to make the API call:
 
 ```sh
-npm install @openapitools/openapi-generator-cli -g
-```
-
-## Run the CLI tool
-
-Following command generates Spring based code (on MS Windows).
-
-```sh
-npx @openapitools/openapi-generator-cli generate -i .\account-info-openapi.yaml -g spring -o .\gencode
-```
-
-# Using OpenAPI Generator with Spring and Gradle
-
-Details are available in [this article](https://medium.com/@barendnieuwoudt/generating-api-code-with-java-springboot-and-the-openapi-generator-f2e232ea0612). The following is using latest versions of the plugins/ dependencies.
-
-## Basic setup of OpenAPI Generator
-
-Plugin needs to be added in `build.gradle`:
-
-```kotlin
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.4.2'
-    id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.openapi.generator' version '7.11.0'
-}
-```
-
-A task needs to be added. The following code picks up OpenAPI yaml file from the `src/main/resources/yaml` folder:
-
-```kotlin
-openApiGenerate {
-    inputSpec.set ('$rootDir/src/main/resources/yaml/account-info-openapi.yaml')
-    generatorName = 'spring'
-}
-```
-
-Gradle taks `openApiGenerate` can be used to build code, which will be  stored in `build/generated-sources` folder.
-
-```sh
-gradlew openApiGenerate
+curl http://localhost:8080/api/v1/transactions/123 ^
+  -H "Authorization: Bearer "%access_token%
 ```

@@ -35,6 +35,8 @@ public class TransactionDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         logger.info ("Preparing repository...");
+
+        repo.deleteAll();
         
         repo.save( buildTransaction("GBP", 935.0, 123) );
         repo.save( buildTransaction("GBP", 9351.0, 123) );
