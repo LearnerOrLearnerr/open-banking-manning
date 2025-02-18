@@ -32,15 +32,6 @@ public class TransactionService {
     @CircuitBreaker(name = "transactionService", fallbackMethod = "foundNone")
     public List<Transaction> findAllByAccountNumber(final Integer acctNr){
 
-        // Authentication based on acctNr and defined role
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getAuthorities() != null) {
-            logger.info ("User Authorities:");
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                logger.info ("Authority: {}", authority.getAuthority());
-            }
-        }
-
         List<Transaction> list = apiClient.findAllByAccountNumber(acctNr);
 
         for (Transaction t : list) {
@@ -57,16 +48,5 @@ public class TransactionService {
         logger.error("Falling back to local database");
         List<Transaction> list = repo.findAllByAccountNumber(acctNr);
         return list;
-    }
-
-    /**
-     * Check if user role matches the account number
-     */
-    public boolean hasAccessToAccount (Integer acctNr, Authentication auth) {
-        final String role = Integer.toString(acctNr);
-
-        return auth.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(role::equals);
     }
 }
