@@ -1,5 +1,7 @@
 package io.betterbanking.config;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +19,8 @@ import java.util.Map;
 public class CustomJwtAuthoritiesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
     private final JwtGrantedAuthoritiesConverter defaultAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+
+    private Logger logger = LoggerFactory.getLogger(CustomJwtAuthoritiesConverter.class);
 
     /**
      * Convert JWT token to a collection of GrantedAuthority
@@ -41,6 +45,9 @@ public class CustomJwtAuthoritiesConverter implements Converter<Jwt, Collection<
         // roles
         List<String> roles = (List<String>) realmAccess.get("roles");
         if (roles == null) return authorities;
+
+        logger.debug("{} roles in JWT found", roles.size());
+        roles.stream().forEach(role -> logger.debug("Role found: {}", role));
 
         authorities.addAll (roles.stream()
                 .map (role -> new SimpleGrantedAuthority(role))

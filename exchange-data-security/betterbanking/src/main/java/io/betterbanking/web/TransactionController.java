@@ -31,7 +31,7 @@ public class TransactionController {
                 .map (this::buildTransactionDto)
                 .collect(Collectors.toList());
 
-        logger.info ("Fetched transactions for account {}", acctNr);
+        logger.info ("Fetched {} transactions for account {}", listDto.size(), acctNr);
 
         return listDto;
     }

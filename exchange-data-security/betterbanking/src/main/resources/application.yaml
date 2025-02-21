@@ -38,6 +38,6 @@ logging:
   level:
     root: INFO
     org.springframework.security: DEBUG
-    org.example: DEBUG
+    io.betterbanking: DEBUG
   pattern:
     console: "%d{dd-MM-yyyy HH:mm:ss} %magenta([%thread]) %5p [%logger{1}] %m%n"

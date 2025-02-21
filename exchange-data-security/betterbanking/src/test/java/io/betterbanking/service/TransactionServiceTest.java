@@ -2,9 +2,11 @@ package io.betterbanking.service;
 
 import io.betterbanking.entity.Transaction;
 import io.betterbanking.repository.TransactionApiClient;
+import io.betterbanking.repository.TransactionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.ArrayList;
@@ -15,7 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 /**
- * Based on @MockitoBean TransactionApiClient, test TransactionService
+ * Unit test of TransactionService
+ * Based on the following @Autowired components of TransactionService
+ * @MockitoBean TransactionApiClient
+ * @MockitoBean TransactionRepository
  */
 @SpringBootTest
 public class TransactionServiceTest {
@@ -26,7 +31,11 @@ public class TransactionServiceTest {
     @MockitoBean
     private TransactionApiClient apiClient;
 
+    @MockitoBean
+    private TransactionRepository repo;
+
     @Test
+    @WithMockUser(roles="999")
     public void shouldReturnEmptyListWhenAccountNumberNotFound () {
         final Integer ACCOUNT_NUMBER = 999;
         when (apiClient.findAllByAccountNumber(ACCOUNT_NUMBER)).thenReturn(List.of());
@@ -36,6 +45,7 @@ public class TransactionServiceTest {
     }
 
     @Test
+    @WithMockUser(username="ragamuffin", roles="123")
     public void shouldReturnTransactionsWhenAccountNumberFound() {
         final Integer ACCOUNT_NUMBER = 123;
 
