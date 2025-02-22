@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/transactions")
+@RequestMapping("/api/v1")
 public class TransactionController {
 
     Logger logger = LoggerFactory.getLogger(TransactionController.class);
@@ -20,7 +20,7 @@ public class TransactionController {
     @Autowired
     TransactionService svc;
 
-    @GetMapping("/{acctNr}")
+    @GetMapping("/transactions/{acctNr}")
     public List<TransactionDto> findAllByAccountNumber (@PathVariable final Integer acctNr) {
 
         logger.info ("Fetching transactions for account {}", acctNr);
@@ -34,6 +34,22 @@ public class TransactionController {
         logger.info ("Fetched {} transactions for account {}", listDto.size(), acctNr);
 
         return listDto;
+    }
+
+    @GetMapping("/accounts")
+    public List<Integer> findAllAccountNumber() {
+        List<Integer> listAccounts = svc.findDistinctAccountNumbers();
+        logger.info ("{} accounts found", listAccounts.size());
+
+        return listAccounts;
+    }
+
+    @PostMapping("/poll/{acctNr}")
+    public String syncTransactions (@PathVariable Integer acctNr) {
+        List<Transaction> list = svc.pollByAccountNumber(acctNr);
+        String response = String.format( "{ status: \"%d transactions added to local repo\"}", list.size());
+        logger.info(response);
+        return response;
     }
 
     private TransactionDto buildTransactionDto (Transaction txn) {
