@@ -1,0 +1,41 @@
+application:
+  open-banking:
+    base-uri: http://localhost:9080
+  better-banking:
+    hostname: localhost
+spring:
+  data:
+    mongodb:
+      username: admin
+      password: adminpassword
+      database: betterbanking
+      authentication-database: admin
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9001/realms/open-banking-realm/protocol/openid-connect/certs
+      client:
+        registration:
+          better-banking:
+            grant_type: client_credentials
+            authorisation: "Basic YmV0dGVyLWJhbmtpbmc6N3lyYlI4WHBZNDViY0tQUA=="
+        provider:
+          better-banking:
+            token-uri: http://localhost:9080/oauth/token
+resilience4j:
+  circuitbreaker:
+    instances:
+      transactionApiClient:
+        failureRateThreshold: 100
+        waitDurationInOpenState: 10s
+        slidingWindowSize: 1 # Consider only the last call
+        minimumNumberOfCalls: 1 # Even one call is enough
+        automaticTransitionFromOpenToHalfOpen: true
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    io.betterbanking: DEBUG
+  pattern:
+    console: "%d{dd-MM-yyyy HH:mm:ss} %magenta([%thread]) %5p [%logger{1}] %m%n"
