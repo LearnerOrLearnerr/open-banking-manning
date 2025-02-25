@@ -10,6 +10,12 @@ spring:
       password: adminpassword
       database: betterbanking
       authentication-database: admin
+  cache:
+    type: redis
+    time-to-live: PT10M
+  redis:
+    host: localhost
+    port: 6379
   security:
     oauth2:
       resourceserver:
