@@ -1,0 +1,62 @@
+services:
+  better-banking:
+    container_name: bb
+    image: betterbanking
+    ports:
+      - 8080:8080
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGODB_INIT_ROOT_USERNAME: admin
+      MONGODB_INIT_ROOT_PASSWORD: adminpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+  keycloak:
+    container_name: kc
+    image: quay.io/keycloak/keycloak:26.1.2
+    command: ["start-dev"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: adminpassword
+    ports:
+      - 9001:8080 # http access to admin webapp and API invokation
+      - 9000:9000 # realm could be accessed on this port (as per realm configuration)
+  caching-server:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
+  acme-banking-db:
+    container_name: acme-banking-db
+    image: 'mysql/mysql-server:latest'
+    ports:
+      - 3308:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=acme
+    restart: always
+  acme-banking:
+    container_name: acme-banking
+    image: nathanbcrocker/acme-testnet
+    ports:
+      - 9080:8080
+    restart: on-failure
+    depends_on:
+      acme-banking-db:
+        condition: service_healthy
+    environment:
+      - co.uk.bankcorp.client=better-banking
+      - co.uk.bankcorp.secret=7yrbR8XpY45bcKPP
+      - MYSQL_HOST=acme-banking-db
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=123456
+      - DATABASE_NAME=acme
+      - DATABASE_PORT=3306
+      - SERVER_PORT=8080
+volumes:
+  mongodb_data:
