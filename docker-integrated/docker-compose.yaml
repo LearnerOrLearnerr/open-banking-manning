@@ -2,34 +2,49 @@ services:
   better-banking:
     container_name: bb
     image: betterbanking
+    depends_on:
+      mongodb:
+        condition: service_started
+      redis:
+        condition: service_started
     ports:
       - 8080:8080
-  mongo:
-    container_name: mongo
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongodb
+      SPRING_REDIS_HOST: redis
+      # acme-banking
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_BETTER_BANKING_TOKEN_URI: http://acme-banking:8080/oauth/token
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_BETTER_BANKING_AUTHORISATION: "Basic YmV0dGVyLWJhbmtpbmc6N3lyYlI4WHBZNDViY0tQUA=="
+      APPLICATION_OPEN_BANKING_BASE_URI: http://acme-banking:8080
+      # keycloak
+      JWK_SET_URI: http://kc:8080/realms/open-banking-realm/protocol/openid-connect/certs
+    networks:
+      - internal
+      - external
+
+  mongodb:
     image: mongo:latest
+    container_name: mongodb
     restart: always
     environment:
-      MONGODB_INIT_ROOT_USERNAME: admin
-      MONGODB_INIT_ROOT_PASSWORD: adminpassword
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+      MONGO_INITDB_DATABASE: admin
     ports:
       - 27017:27017
     volumes:
       - mongodb_data:/data/db
-  keycloak:
-    container_name: kc
-    image: quay.io/keycloak/keycloak:26.1.2
-    command: ["start-dev"]
-    environment:
-      KC_BOOTSTRAP_ADMIN_USERNAME: admin
-      KC_BOOTSTRAP_ADMIN_PASSWORD: adminpassword
-    ports:
-      - 9001:8080 # http access to admin webapp and API invokation
-      - 9000:9000 # realm could be accessed on this port (as per realm configuration)
-  caching-server:
+    networks:
+      - internal
+
+  redis:
     container_name: redis
     image: redis
     ports:
       - 6379:6379
+    networks:
+      - internal
+
   acme-banking-db:
     container_name: acme-banking-db
     image: 'mysql/mysql-server:latest'
@@ -40,6 +55,9 @@ services:
       - MYSQL_ROOT_HOST=%
       - MYSQL_DATABASE=acme
     restart: always
+    networks:
+      - internal
+
   acme-banking:
     container_name: acme-banking
     image: nathanbcrocker/acme-testnet
@@ -58,5 +76,15 @@ services:
       - DATABASE_NAME=acme
       - DATABASE_PORT=3306
       - SERVER_PORT=8080
+    networks:
+      - internal
+
 volumes:
   mongodb_data:
+
+networks:
+  internal:
+    name: better-banking
+  external:
+    name: docker-keycloak_default
+    external: true

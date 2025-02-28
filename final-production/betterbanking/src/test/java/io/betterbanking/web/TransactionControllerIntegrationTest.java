@@ -46,13 +46,17 @@ public class TransactionControllerIntegrationTest {
     public void setup() {
         RestAssured.baseURI = "http://localhost:9001/realms/open-banking-realm/protocol";
 
+        final String clientId = "open-banking";
+        final String clientSecret = "yOo5wZwkzPDCvI2GgWwYNO7w0bHGRTfS";
+        logger.debug("Using client secret {} to fetch the access_token from OAuth server", clientSecret);
+
         Response resourceServerToken = given()
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED.toString())
                 .formParam("grant_type", "password")
                 .formParam("username", "ragamuffin")
                 .formParam("password", "ragamuffin")
-                .formParam("client_id", "open-banking")
-                .formParam("client_secret", "BxfDdnv47dGz3p9kzRenMx5NmqcYkfNi")
+                .formParam("client_id", clientId)
+                .formParam("client_secret", clientSecret)
                 .when()
                 .post("/openid-connect/token");
 
@@ -66,7 +70,6 @@ public class TransactionControllerIntegrationTest {
     @Test
     public void shouldReturnTransactionListForValidToken() {
         String betterBankingBaseUri = String.format ("http://%s:%d", resourceServerHostName, port);
-        logger.info("Base URI: {}", betterBankingBaseUri);
 
         final String uri = String.format("%s/api/v1/transactions/%d", betterBankingBaseUri, ACCOUNT_NUMBER);
         logger.info ("URI to fetch transactions: {}", uri);
